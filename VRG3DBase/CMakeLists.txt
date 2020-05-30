@@ -1,19 +1,24 @@
 project(VRG3DBase)
 
-find_package(MinVR REQUIRED) # MinVR_INCLUDE_DIR, MinVR_LIBRARIES
+#include(AutoBuildG3D)
+#AutoBuild_use_package_MinVRG3D(${PROJECT_NAME} PUBLIC)
+
+#find_package(MinVR REQUIRED) # MinVR_INCLUDE_DIR, MinVR_LIBRARIES
 #find_package(G3D REQUIRED) # G3D_INCLUDE_DIR, G3D_LIBRARIES
 
 
 # Includes
-#find_path(MinVR_INCLUDE_DIR 
-#    api/MinVR.h
-  #HINTS 
-#    ${CMAKE_INSTALL_PREFIX}/include/MinVR
-	#${CMAKE_INSTALL_PREFIX}/include
-    #${MINVR_PROJECT_ROOT}/include
-    #/usr/local/include/MinVR/
+find_path(MinVR_INCLUDE_DIR 
+    api/MinVR.h
+  HINTS 
+    ${CMAKE_INSTALL_PREFIX}/include/MinVR
+	${CMAKE_INSTALL_PREFIX}/include
+    ${MINVR_PROJECT_ROOT}/include
+    /usr/local/include/MinVR/
     
-#)
+)
+
+
 
 find_path(MinVRG3D_INCLUDE_DIR 
     VRG3DApp.h
@@ -25,19 +30,19 @@ find_path(MinVRG3D_INCLUDE_DIR
 )
 
 # lib MinVR
-#find_library(MinVR_LIBRARY
-#  NAMES 
-#    MinVR
-#	MinVRd
-#  HINTS 
-#    ${CMAKE_INSTALL_PREFIX}/lib/
-#	${CMAKE_INSTALL_PREFIX}/lib/MinVR/Release
-#	${CMAKE_INSTALL_PREFIX}/lib/MinVR/Debug
-#	${CMAKE_INSTALL_PREFIX}/lib/MinVR
- #   ${MINVR_PROJECT_ROOT}/lib/
-  #  /usr/local/lib
-#	/usr/local/lib/MinVR
-#)
+find_library(MinVR_LIBRARY
+  NAMES 
+    MinVR
+	MinVRd
+  HINTS 
+    ${CMAKE_INSTALL_PREFIX}/lib/
+	${CMAKE_INSTALL_PREFIX}/lib/MinVR/Release
+	${CMAKE_INSTALL_PREFIX}/lib/MinVR/Debug
+	${CMAKE_INSTALL_PREFIX}/lib/MinVR
+    ${MINVR_PROJECT_ROOT}/lib/
+    /usr/local/lib
+	/usr/local/lib/MinVR
+)
 
 find_library(MinVRG3D_LIBRARY
   NAMES 
