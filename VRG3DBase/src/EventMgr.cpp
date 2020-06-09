@@ -4,7 +4,7 @@
 //#include "CommonInc.H"
 #include "../include/ConfigVal.H"
 #include "../include/StringUtils.H"
-#include "../../VRG3D/include/SynchedSystem.h"
+#include "SynchedSystem.h"
 
 using namespace G3D;
 
