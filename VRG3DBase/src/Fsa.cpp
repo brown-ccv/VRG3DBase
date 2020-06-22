@@ -11,7 +11,7 @@ Fsa::Fsa(const std::string &name)
 {
   _curState = 0;
   _name = name;
-  _debug = false;
+  _debug = true;
 }
 
 Fsa::~Fsa()
@@ -202,16 +202,16 @@ Fsa::checkTriggerMatch(MinVR::EventRef event, const std::string &triggerName)
     if (triggerName == "ALL")
       return true;
     else if ((triggerName == "ALL_STANDARD") && 
-	     (event->getType() == MinVR::Event::EVENTTYPE_STANDARD))
+	     (event->getType() == MinVR::VRG3DEvent::EVENTTYPE_STANDARD))
       return true;
     else if ((triggerName == "ALL_1D") && 
-	     (event->getType() == MinVR::Event::EVENTTYPE_1D))
+	     (event->getType() == MinVR::VRG3DEvent::EVENTTYPE_1D))
       return true;
     else if ((triggerName == "ALL_2D") && 
-	     (event->getType() == MinVR::Event::EVENTTYPE_2D))
+	     (event->getType() == MinVR::VRG3DEvent::EVENTTYPE_2D))
       return true;
     else if ((triggerName == "ALL_COORDINATEFRAME") && 
-	     (event->getType() == MinVR::Event::EVENTTYPE_COORDINATEFRAME))
+	     (event->getType() == MinVR::VRG3DEvent::EVENTTYPE_COORDINATEFRAME))
       return true;
 
   }

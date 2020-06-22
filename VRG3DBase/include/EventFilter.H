@@ -3,7 +3,7 @@
 #define EVENTFILTER_H
 
 //#include "CommonInc.H"
-#include <Event.h>
+#include <VRG3DEvent.h>
 
 
 

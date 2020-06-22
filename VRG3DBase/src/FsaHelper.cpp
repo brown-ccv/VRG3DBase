@@ -74,7 +74,7 @@ FsaState::addExitCallback(EventCallbackFunctor *f)
 void
 FsaState::callEnterCallbacks()
 {
-  MinVR::EventRef e = new MinVR::Event(_name + "_stateEnter");
+  MinVR::EventRef e = new MinVR::VRG3DEvent(_name + "_stateEnter");
   for (int i=0;i<_enterCallbacks.size();i++) {
     _enterCallbacks[i]->exec(e);
   }
@@ -83,7 +83,7 @@ FsaState::callEnterCallbacks()
 void
 FsaState::callExitCallbacks()
 {
-  MinVR::EventRef e = new MinVR::Event(_name + "_stateExit");
+  MinVR::EventRef e = new MinVR::VRG3DEvent(_name + "_stateExit");
   for (int i=0;i<_exitCallbacks.size();i++) {
     _exitCallbacks[i]->exec(e);
   }

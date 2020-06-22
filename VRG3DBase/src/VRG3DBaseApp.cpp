@@ -1,6 +1,6 @@
 #include "../include/VRG3DBaseApp.h"
 #include "../include/ConfigVal.H"
-
+#include <VRG3DEvent.h>
 
 	
 
@@ -36,9 +36,9 @@
     _eventMgr = new EventMgr(_log);
 
     // startup a mouse-based standin for 6DOF trackers if we're on a desktop system
-    /*if (G3D::beginsWith(vrSetupStr, "desk")) {
-      _mouseToTracker = new MouseToTracker(_gfxMgr->getCamera(), ConfigVal("MouseToTracker_NumTrackers", 2, false));
-    }*/
+    if (G3D::beginsWith(vrSetupStr, "desk")) {
+      _mouseToTracker = new MinVR::MouseToTracker(_gfxMgr->getCamera(), MinVR::ConfigVal("MouseToTracker_NumTrackers", 2, false));
+    }
   }
 
   VRG3DBaseApp::~VRG3DBaseApp()
@@ -48,15 +48,75 @@
 
    void VRG3DBaseApp::onRenderGraphicsScene(const MinVR::VRGraphicsState& state)
   {
+     G3D::Matrix4 g3dViewMatrix = state.getViewMatrix();
+     G3D::Matrix4 g3dProjectionMatrix = state.getProjectionMatrix();
+
+     // _gfxMgr->getCamera() and _cameras[0] should be the same camera
+     _gfxMgr->getCamera()->setViewMatrixCoordinate(g3dViewMatrix);
+     _gfxMgr->getCamera()->setProjectionMatrix(g3dProjectionMatrix);
      _cameras[0]->applyProjection(myRenderDevice, state);
      //_gfxMgr->drawFrame();
     //_gfxMgr->drawStats();
     //vrg3dSleepMsecs(ConfigVal("VRBaseApp_SleepTime", 0.0, false));
   }
 
+   void VRG3DBaseApp::onCursorMove(const MinVR::VRCursorEvent &event)
+   {
+     
+     if (_mouseToTracker.notNull()) {
+       G3D::Array<MinVR::EventRef> events;
+       if (event.getName() == "Mouse_Pointer")
+       {
+         const float* pos = event.getNormalizedPos();
+         MinVR::EventRef vrg3dEvent = new MinVR::VRG3DEvent("Mouse_Pointer", Vector2(pos[0], pos[1]));
+         events.append(vrg3dEvent);
+       }
+      // G3D::Array<MinVR::EventRef> newEvents;
+       
+       G3D::Array<MinVR::EventRef> newEvents;
+       _mouseToTracker->doUserInput(events, newEvents);
+       events.append(newEvents);
+       for (int i = 0; i < events.size(); i++) {
+         //if (events[i]->getName() == "Shutdown") {
+         //  _endProgram = true;
+        // }
+         _eventMgr->queueEvent(events[i]);
+       }
+       _eventMgr->processEventQueue();
+       //_gfxMgr->poseFrame();
+     }
+   }
 
+   void VRG3DBaseApp::onAnalogChange(const MinVR::VRAnalogEvent &state)
+   {
 
+   }
 
+   void VRG3DBaseApp::onButtonDown(const MinVR::VRButtonEvent &state)
+   {
 
+   }
+
+   void VRG3DBaseApp::onButtonUp(const MinVR::VRButtonEvent &state)
+   {
+
+   }
+
+   void VRG3DBaseApp::onTrackerMove(const MinVR::VRTrackerEvent &event)
+   {
+     if (//event.getName() == "HTC_Controller_1_Move" ||
+       event.getName() == "HTC_Controller_2_Move" ||
+       //event.getName() == "HTC_Controller_Left_Move" ||
+       event.getName() == "HTC_Controller_Right_Move")
+     {
+       const float * transformM = event.getTransform();
+       Matrix4 g3dTransforMatrix(transformM);
+       g3dTransforMatrix = g3dTransforMatrix.transpose();
+       MinVR::EventRef vrg3dEvent = new MinVR::VRG3DEvent("Brush_Tracker", g3dTransforMatrix.approxCoordinateFrame());
+       _eventMgr->queueEvent(vrg3dEvent);
+       
+     }
+     _eventMgr->processEventQueue();
+   }
 
 

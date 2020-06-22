@@ -4,7 +4,7 @@
 #define FSAHELPER_H
 
 #include <CommonInc.H>
-#include <Event.h>
+#include <VRG3DEvent.h>
 
 
 // Functors allow for callback functions that are class methods
