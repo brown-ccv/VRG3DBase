@@ -17,7 +17,7 @@
 // include Event specifications and functors to allow class method callbacks
 #include <VRG3DEvent.h>
 // include FsaArc and FsaState helper classes
-#include "../include/FsaHelper.H"
+#include "FsaHelper.H"
 
 
 typedef G3D::ReferenceCountedPointer<class Fsa> FsaRef;

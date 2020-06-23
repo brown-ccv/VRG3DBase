@@ -8,9 +8,9 @@ cmake_minimum_required (VERSION 3.9)
 
 # Dependencies that are auto-downloaded, built, and installed for you will go here.  So, you 
 # may use this even if not planning to install this particular project on your system.
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT OR "${CMAKE_INSTALL_PREFIX}" STREQUAL "")
-    set (CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "default install path" FORCE )
-endif()
+#if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT OR "${CMAKE_INSTALL_PREFIX}" STREQUAL "")
+#    set (CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "default install path" FORCE )
+#endif()
 
 list(APPEND CMAKE_MODULE_PATH  ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_INSTALL_PREFIX})
 include(MessageMacros)
@@ -54,8 +54,12 @@ endif(COMMAND cmake_policy)
 
 
 
+
 set(EXTERNAL_CMAKE_SCRIPTS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 
 
 add_subdirectory(VRG3DBase)
+
+
+

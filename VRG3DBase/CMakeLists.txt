@@ -4,11 +4,13 @@ project(VRG3DBase)
 #AutoBuild_use_package_MinVRG3D(${PROJECT_NAME} PUBLIC)
 
 find_package(MinVR REQUIRED HINTS ${MinVR_DIR}) # MinVR_INCLUDE_DIR, MinVR_LIBRARIES
-message(error ${MinVR_DIR})
+message(STATUS "MinVR Found in: ${MinVR_DIR}")
 #---------------------- Find & Add Dependencies ----------------------
 message(STATUS "Init VRG3DBase build")
 
 set(EXTERNAL_CMAKE_SCRIPTS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(INSTALL_LIB ${CMAKE_BINARY_DIR}/install/${PROJECT_NAME})
+
 
 set(HEADERFILES 
   include/ConfigVal.H
@@ -63,10 +65,28 @@ set_target_properties(VRG3DBase PROPERTIES DEBUG_POSTFIX "d")
 
 target_link_libraries(VRG3DBase PUBLIC MinVR::MinVR MinVR::MinVR_G3D)
 
-install(FILES ${HEADERFILES} DESTINATION include/${PROJECT_NAME})
+#install(TARGETS ${PROJECT_NAME} EXPORT VRG3DBaseLib COMPONENT ${PROJECT_NAME}
+#    LIBRARY DESTINATION ${INSTALL_LIB}/lib
+#)
 
-INSTALL(TARGETS VRG3DBase
-   ARCHIVE DESTINATION lib
-   LIBRARY DESTINATION lib
-   RUNTIME DESTINATION bin
+set(CMAKE_INSTALL_LIBDIR  ${INSTALL_LIB}/lib )
+set(CMAKE_INSTALL_PREFIX  ${INSTALL_LIB})
+
+install(FILES ${HEADERFILES} DESTINATION ${INSTALL_LIB}/include/ 
+              COMPONENT ${PROJECT_NAME})
+
+install(TARGETS ${PROJECT_NAME} 
+        EXPORT VRG3DBaseTargets  
+		COMPONENT ${PROJECT_NAME}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} 
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
    )
+   
+export(TARGETS
+        ${PROJECT_NAME}
+        FILE "${INSTALL_LIB}/cmake/VRG3DBase.cmake"
+)
+install(EXPORT
+        VRG3DBaseTargets
+    DESTINATION "${INSTALL_LIB}/cmake"    
+)
