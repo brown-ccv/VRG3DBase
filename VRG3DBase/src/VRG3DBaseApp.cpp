@@ -83,21 +83,21 @@
          _eventMgr->queueEvent(events[i]);
        }
        _eventMgr->processEventQueue();
-       //_gfxMgr->poseFrame();
+       _gfxMgr->poseFrame();
      }
    }
 
-   void VRG3DBaseApp::onAnalogChange(const MinVR::VRAnalogEvent &state)
+   /*void VRG3DBaseApp::onAnalogChange(const MinVR::VRAnalogEvent &event)
+   {
+     
+   }*/
+
+   void VRG3DBaseApp::onButtonDown(const MinVR::VRButtonEvent &event)
    {
 
    }
 
-   void VRG3DBaseApp::onButtonDown(const MinVR::VRButtonEvent &state)
-   {
-
-   }
-
-   void VRG3DBaseApp::onButtonUp(const MinVR::VRButtonEvent &state)
+   void VRG3DBaseApp::onButtonUp(const MinVR::VRButtonEvent &event)
    {
 
    }
@@ -117,6 +117,7 @@
        
      }
      _eventMgr->processEventQueue();
+     
    }
 
 
