@@ -30,7 +30,6 @@ class VRG3DBaseApp : public MinVR::VRG3DApp
   protected:
     
     GfxMgrRef         _gfxMgr;
-    G3D::Color4                _clearColor;
     EventMgrRef       _eventMgr;
     MinVR::MouseToTrackerRef _mouseToTracker;
 

@@ -5,7 +5,7 @@
 	
 
   VRG3DBaseApp::VRG3DBaseApp(int argc, char *argv[])
-    :VRG3DApp(argc,argv), _clearColor(G3D::Color4(0, 0, 0, 1))
+    :VRG3DApp(argc,argv)
   {
     _log = new G3D::Log("log.txt");
 
