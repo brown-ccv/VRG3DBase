@@ -53,7 +53,7 @@ endif(COMMAND cmake_policy)
 #---------------------- Find & Add Dependencies ----------------------
 
 
-
+add_definitions(-DG3D_NO_FFMPEG)
 
 set(EXTERNAL_CMAKE_SCRIPTS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
