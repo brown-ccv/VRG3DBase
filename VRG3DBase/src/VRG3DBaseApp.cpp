@@ -94,14 +94,13 @@
 
    void VRG3DBaseApp::onButtonDown(const MinVR::VRButtonEvent &state)
    {
-     cout << "state DOWN" << state.getName() << endl;
      MinVR::EventRef vrg3dEvent = new MinVR::VRG3DEvent(state.getName());
      _eventMgr->queueEvent(vrg3dEvent);
    }
 
    void VRG3DBaseApp::onButtonUp(const MinVR::VRButtonEvent &state)
    {
-     cout << "state UP" << state.getName() << endl;
+    
      MinVR::EventRef vrg3dEvent = new MinVR::VRG3DEvent(state.getName());
      _eventMgr->queueEvent(vrg3dEvent);
    }
