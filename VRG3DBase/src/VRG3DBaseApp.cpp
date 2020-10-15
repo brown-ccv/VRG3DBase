@@ -46,7 +46,16 @@
 
   }
 
-   void VRG3DBaseApp::onRenderGraphicsScene(const MinVR::VRGraphicsState& state)
+  void VRG3DBaseApp::onRenderGraphicsContext(const MinVR::VRGraphicsState& state)
+  {
+    if (_eventMgr!=nullptr)
+    {
+      _eventMgr->processEventQueue();
+    }
+    VRG3DApp::onRenderGraphicsContext(state);
+  }
+
+  void VRG3DBaseApp::onRenderGraphicsScene(const MinVR::VRGraphicsState& state)
   {
      G3D::Matrix4 g3dViewMatrix = state.getViewMatrix();
      G3D::Matrix4 g3dProjectionMatrix = state.getProjectionMatrix();
@@ -82,25 +91,28 @@
         // }
          _eventMgr->queueEvent(events[i]);
        }
-       _eventMgr->processEventQueue();
+       //_eventMgr->processEventQueue();
        _gfxMgr->poseFrame();
      }
    }
 
-   /*void VRG3DBaseApp::onAnalogChange(const MinVR::VRAnalogEvent &event)
+   void VRG3DBaseApp::onAnalogChange(const MinVR::VRAnalogEvent &event)
    {
-     
-   }*/
+     if (event.getName().find("HTC_Controller_1_Trigger1") != -1
+       || event.getName().find("HTC_Controller_Right_Trigger1") != -1)
+     {
 
-   void VRG3DBaseApp::onButtonDown(const MinVR::VRButtonEvent &state)
-   {
-     MinVR::EventRef vrg3dEvent = new MinVR::VRG3DEvent(state.getName());
-     _eventMgr->queueEvent(vrg3dEvent);
+       _eventMgr->queueEvent(new MinVR::VRG3DEvent("My_Brush_Pressure", event.getValue()));
+
+     }
+     //_eventMgr->processEventQueue();
+     _gfxMgr->poseFrame();
    }
+
 
    void VRG3DBaseApp::onButtonUp(const MinVR::VRButtonEvent &state)
    {
-    
+
      MinVR::EventRef vrg3dEvent = new MinVR::VRG3DEvent(state.getName());
      _eventMgr->queueEvent(vrg3dEvent);
    }
@@ -117,10 +129,19 @@
        g3dTransforMatrix = g3dTransforMatrix.transpose();
        MinVR::EventRef vrg3dEvent = new MinVR::VRG3DEvent("Brush_Tracker", g3dTransforMatrix.approxCoordinateFrame());
        _eventMgr->queueEvent(vrg3dEvent);
-       
+
      }
-     _eventMgr->processEventQueue();
-     
+     //_eventMgr->processEventQueue();
+
    }
+
+   void VRG3DBaseApp::onButtonDown(const MinVR::VRButtonEvent &state)
+   {
+     MinVR::EventRef vrg3dEvent = new MinVR::VRG3DEvent(state.getName());
+     _eventMgr->queueEvent(vrg3dEvent);
+   }
+
+
+   
 
 

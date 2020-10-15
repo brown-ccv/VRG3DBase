@@ -19,9 +19,10 @@ class VRG3DBaseApp : public MinVR::VRG3DApp
      virtual ~VRG3DBaseApp();
      
     //PLUGIN_API virtual void onRenderGraphicsContext(const VRGraphicsState& state);
+     virtual void onRenderGraphicsContext(const MinVR::VRGraphicsState& state);
      virtual void onRenderGraphicsScene(const MinVR::VRGraphicsState& state);
      virtual void onCursorMove(const MinVR::VRCursorEvent &event);
-     /*virtual void onAnalogChange(const MinVR::VRAnalogEvent &event);*/
+     virtual void onAnalogChange(const MinVR::VRAnalogEvent &event);
      virtual void onButtonDown(const MinVR::VRButtonEvent &event);
      virtual void onButtonUp(const MinVR::VRButtonEvent &event);
      virtual void onTrackerMove(const MinVR::VRTrackerEvent &event);
