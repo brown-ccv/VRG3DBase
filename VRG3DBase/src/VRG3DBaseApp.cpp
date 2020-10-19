@@ -80,32 +80,25 @@
          MinVR::EventRef vrg3dEvent = new MinVR::VRG3DEvent("Mouse_Pointer", Vector2(pos[0], pos[1]));
          events.append(vrg3dEvent);
        }
-      // G3D::Array<MinVR::EventRef> newEvents;
+      
        
        G3D::Array<MinVR::EventRef> newEvents;
        _mouseToTracker->doUserInput(events, newEvents);
        events.append(newEvents);
        for (int i = 0; i < events.size(); i++) {
-         //if (events[i]->getName() == "Shutdown") {
-         //  _endProgram = true;
-        // }
+         
          _eventMgr->queueEvent(events[i]);
        }
-       //_eventMgr->processEventQueue();
+       
        _gfxMgr->poseFrame();
      }
    }
 
    void VRG3DBaseApp::onAnalogChange(const MinVR::VRAnalogEvent &event)
    {
-     if (event.getName().find("HTC_Controller_1_Trigger1") != -1
-       || event.getName().find("HTC_Controller_Right_Trigger1") != -1)
-     {
+     
+     _eventMgr->queueEvent(new MinVR::VRG3DEvent(event.getName(), event.getValue()));
 
-       _eventMgr->queueEvent(new MinVR::VRG3DEvent("My_Brush_Pressure", event.getValue()));
-
-     }
-     //_eventMgr->processEventQueue();
      _gfxMgr->poseFrame();
    }
 
@@ -119,19 +112,14 @@
 
    void VRG3DBaseApp::onTrackerMove(const MinVR::VRTrackerEvent &event)
    {
-     if (//event.getName() == "HTC_Controller_1_Move" ||
-       event.getName() == "HTC_Controller_2_Move" ||
-       //event.getName() == "HTC_Controller_Left_Move" ||
-       event.getName() == "HTC_Controller_Right_Move")
-     {
+     
        const float * transformM = event.getTransform();
        Matrix4 g3dTransforMatrix(transformM);
        g3dTransforMatrix = g3dTransforMatrix.transpose();
-       MinVR::EventRef vrg3dEvent = new MinVR::VRG3DEvent("Brush_Tracker", g3dTransforMatrix.approxCoordinateFrame());
+       MinVR::EventRef vrg3dEvent = new MinVR::VRG3DEvent(event.getName(), g3dTransforMatrix.approxCoordinateFrame());
        _eventMgr->queueEvent(vrg3dEvent);
 
-     }
-     //_eventMgr->processEventQueue();
+     
 
    }
 
