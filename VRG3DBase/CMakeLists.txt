@@ -66,6 +66,14 @@ set_target_properties(VRG3DBase PROPERTIES DEBUG_POSTFIX "d")
 
 target_link_libraries(VRG3DBase PUBLIC MinVR::MinVR MinVR::MinVR_G3D)
 
+if(TARGET MinVR::MinVR_Photon)
+	OPTION(WITH_PHOTON_SUPPORT "Builds VRG3DBase with special support for Photon" OFF)
+	IF(WITH_PHOTON_SUPPORT)
+		target_link_libraries(VRG3DBase PUBLIC MinVR::MinVR_Photon)
+		add_definitions(-DWITH_PHOTON)
+	ENDIF(WITH_PHOTON_SUPPORT)
+endif()
+
 #install(TARGETS ${PROJECT_NAME} EXPORT VRG3DBaseLib COMPONENT ${PROJECT_NAME}
 #    LIBRARY DESTINATION ${INSTALL_LIB}/lib
 #)

@@ -39,6 +39,16 @@
     if (G3D::beginsWith(vrSetupStr, "desk")) {
       _mouseToTracker = new MinVR::MouseToTracker(_gfxMgr->getCamera(), MinVR::ConfigVal("MouseToTracker_NumTrackers", 2, false));
     }
+
+#ifdef WITH_PHOTON
+	std::vector<MinVR::VRInputDevice*> devices = getInputDevices();
+	for (int i = 0; i < devices.size(); i++)
+	{
+		photon = dynamic_cast<MinVR::VRPhotonDevice*>(devices[i]);
+		if (photon != nullptr)
+			break;
+	}
+#endif
   }
 
   VRG3DBaseApp::~VRG3DBaseApp()
@@ -50,7 +60,16 @@
   {
     if (_eventMgr!=nullptr)
     {
-      _eventMgr->processEventQueue();
+#ifdef WITH_PHOTON
+		if (photon)
+			_eventMgr->setPhotonProperties(photon->getServerTime(), photon->getUsername());
+#endif
+		_eventMgr->processEventQueue();
+#ifdef WITH_PHOTON
+		if (photon) {
+			photon->addEvents(&_eventMgr->getOutEvents());
+		}
+#endif
     }
     VRG3DApp::onRenderGraphicsContext(state);
   }
@@ -96,31 +115,33 @@
 
    void VRG3DBaseApp::onAnalogChange(const MinVR::VRAnalogEvent &event)
    {
-     
      _eventMgr->queueEvent(new MinVR::VRG3DEvent(event.getName(), event.getValue()));
-
      _gfxMgr->poseFrame();
    }
 
 
    void VRG3DBaseApp::onButtonUp(const MinVR::VRButtonEvent &state)
    {
-
      MinVR::EventRef vrg3dEvent = new MinVR::VRG3DEvent(state.getName());
      _eventMgr->queueEvent(vrg3dEvent);
    }
 
    void VRG3DBaseApp::onTrackerMove(const MinVR::VRTrackerEvent &event)
-   {
-     
+   {   
        const float * transformM = event.getTransform();
        Matrix4 g3dTransforMatrix(transformM);
        g3dTransforMatrix = g3dTransforMatrix.transpose();
        MinVR::EventRef vrg3dEvent = new MinVR::VRG3DEvent(event.getName(), g3dTransforMatrix.approxCoordinateFrame());
        _eventMgr->queueEvent(vrg3dEvent);
+   }
 
-     
-
+   void VRG3DBaseApp::onGenericEvent(const MinVR::VRDataIndex &index) {
+	   if (index.exists("Message")) {
+		   std::string message = index.getValue("Message");
+		   _eventMgr->decode_xml(message);
+		   MinVR::EventRef vrg3dEvent = new MinVR::VRG3DEvent(index.getName(), message);
+		   _eventMgr->queueEvent(vrg3dEvent);
+	   }
    }
 
    void VRG3DBaseApp::onButtonDown(const MinVR::VRButtonEvent &state)

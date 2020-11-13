@@ -260,8 +260,67 @@ EventMgr::queueTimerEvent(MinVR::EventRef event, double queueTime)
   _timerEventTimes.append(MinVR::SynchedSystem::getLocalTime() + queueTime);
 }
 
+#ifdef WITH_PHOTON
+	MinVR::VRDataQueue & EventMgr::getOutEvents() {
+		return _outEvents;
+	}
 
+	void EventMgr::setPhotonProperties(int timestamp, std::string user_Identifier) {
+		_server_timestamp = timestamp;
+		_user_identifier = user_Identifier;
+	}
 
+	std::string EventMgr::getUserIdentifer() {
+		return _user_identifier;
+	}
+
+	int EventMgr::getServerTime() {
+		return _server_timestamp;
+	}
+
+	void EventMgr::addEvent(std::string name, std::string message) {
+		MinVR::VRDataIndex di(name);
+		encode_xml(message);
+		di.addData("Message", message);
+		_outEvents.push(di);
+	}
+#endif
+
+	void EventMgr::encode_xml(std::string& data) {
+		std::string buffer;
+		buffer.reserve(data.size());
+		for (size_t pos = 0; pos != data.size(); ++pos) {
+			switch (data[pos]) {
+			case '&':  buffer.append("&amp;");       break;
+			case '\"': buffer.append("&quot;");      break;
+			case '\'': buffer.append("&apos;");      break;
+			case '<':  buffer.append("&lt;");        break;
+			case '>':  buffer.append("&gt;");        break;
+			default:   buffer.append(&data[pos], 1); break;
+			}
+		}
+		data.swap(buffer);
+	}
+
+	void EventMgr::decode_xml(std::string& data, std::string toSearch, std::string replaceStr) {
+		size_t pos = data.find(toSearch);
+		// Repeat till end is reached
+		while (pos != std::string::npos)
+		{
+			// Replace this occurrence of Sub String
+			data.replace(pos, toSearch.size(), replaceStr);
+			// Get the next occurrence from the current position
+			pos = data.find(toSearch, pos + replaceStr.size());
+		}
+	}
+
+	void EventMgr::decode_xml(std::string& data) {
+		decode_xml(data, "&amp;", "&");
+		decode_xml(data, "&quot;", "\"");
+		decode_xml(data, "&apos;", "\'");
+		decode_xml(data, "&lt;", "<");
+		decode_xml(data, "&gt;", "&");
+	}
 
 CoordinateFrame 
 EventMgr::getCurrentHeadFrame()

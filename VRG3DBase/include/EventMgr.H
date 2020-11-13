@@ -101,6 +101,22 @@ public:
   /// setup so that head movement events are named "Head_Tracker".
    G3D::CoordinateFrame  getCurrentHeadFrame();
 
+#ifdef WITH_PHOTON
+   MinVR::VRDataQueue & getOutEvents();
+
+   void setPhotonProperties(int timestamp, std::string  user_Identifier);
+
+   std::string getUserIdentifer();
+
+   int getServerTime();
+
+   void addEvent(std::string name, std::string message);
+#endif
+
+   void encode_xml(std::string& data);
+
+   void decode_xml(std::string& data);
+
 private:
   G3D::Log                   *_log;
   G3D::Array<MinVR::EventRef>       _eventQueue;
@@ -116,6 +132,14 @@ private:
 
   /// For each Event name, maintains a copy of the most recent Event queued
   G3D::Table< std::string, MinVR::EventRef > _recentEventTable;
+
+  void decode_xml(std::string& data, std::string toSearch, std::string replaceStr);
+
+#ifdef WITH_PHOTON
+  MinVR::VRDataQueue _outEvents;
+  int _server_timestamp;
+  std::string _user_identifier;
+#endif
 };
 
 #endif

@@ -10,6 +10,9 @@
 #include "GfxMgr.H"
 #include "EventMgr.H"
 
+#ifdef WITH_PHOTON
+	#include <VRPhotonDevice.h>
+#endif
 
 
 class VRG3DBaseApp : public MinVR::VRG3DApp
@@ -26,6 +29,7 @@ class VRG3DBaseApp : public MinVR::VRG3DApp
      virtual void onButtonDown(const MinVR::VRButtonEvent &event);
      virtual void onButtonUp(const MinVR::VRButtonEvent &event);
      virtual void onTrackerMove(const MinVR::VRTrackerEvent &event);
+	 virtual void onGenericEvent(const MinVR::VRDataIndex &index);
 
 
   protected:
@@ -34,7 +38,9 @@ class VRG3DBaseApp : public MinVR::VRG3DApp
     EventMgrRef       _eventMgr;
     MinVR::MouseToTrackerRef _mouseToTracker;
 
-
+#ifdef WITH_PHOTON
+	MinVR::VRPhotonDevice * photon;
+#endif
     
     
 };
